@@ -1,4 +1,4 @@
-Here's the reformatted markdown using conventional markdown formatting:
+ Here's the reformatted markdown using conventional markdown formatting:
 # Rasterization Pipeline
 - Tries to generate a realistic 2D image on the camera plane from the 3D scene using the light source and camera
 ## 1. Application Processing

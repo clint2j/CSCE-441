@@ -5,9 +5,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 #include <iostream>
+#include <utility>
+#include <optional>
 #include "MatrixStack.h"
 #include "Program.h"
+using std::pair;
 
+using mousePos = std::optional<glm::vec2>;
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
@@ -19,6 +23,8 @@ double currentXpos, currentYpos;
 glm::vec3 eye(0.0f, 0.0f, 8.0f);
 glm::vec3 center(0.0f, 0.0f, 0.0f);
 glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+mousePos lastMousePos = {};
 
 Program program;
 MatrixStack modelViewProjectionMatrix;
@@ -88,16 +94,44 @@ void Display()
 // Mouse callback function
 void MouseCallback(GLFWwindow* lWindow, int button, int action, int mods)
 {
-	if (button == GLFW_MOUSE_BUTTON_LEFT && GLFW_PRESS == action)
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		std::cout << "Mouse left button is pressed." << std::endl;
+	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE){
+		std::cout << "Mouse Released!!!!\n";
+		lastMousePos = {};
+	}
 }
 
 // Mouse position callback function
 void CursorPositionCallback(GLFWwindow* lWindow, double xpos, double ypos)
 {
 	int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-	if (state == GLFW_PRESS)
-		std::cout << "Mouse position is: x - " << xpos << ", y - " << ypos << std::endl;
+	glm::vec4 viewDirection = glm::vec4(glm::normalize(center - eye), 0.0f);
+	glm::vec3 right = glm::cross(glm::vec3(viewDirection), glm::vec3(up));
+    right = glm::normalize(right);
+	if (state == GLFW_PRESS){
+		glm::vec2 currMouse = {xpos,ypos};
+		if (!lastMousePos){
+			lastMousePos = currMouse;
+		}
+		else {
+			glm::vec2 diff = currMouse-lastMousePos.value();
+			if (diff.x != 0){
+				glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(diff.x), up);
+				eye = glm::vec3(rotationMatrix * glm::vec4(eye, 1.0f));
+			}
+			else if (diff.y != 0){
+				glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(diff.y), right);
+				eye = glm::vec3(rotationMatrix * glm::vec4(eye, 1.0f));
+			}
+			lastMousePos = currMouse;
+		}
+		// std::cout << "Mouse position is: x - " << xpos << ", y - " << ypos << std::endl;
+	}
+	state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+	if (state == GLFW_PRESS){
+		
+	}
 }
 
 
