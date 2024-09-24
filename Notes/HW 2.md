@@ -1,0 +1,1 @@
+Use Tc for bring object center to joint and use Rc to orient object correctly. Use Tp to bring object edge to join

@@ -3,6 +3,6 @@
 [[OpenGL]]
 [[GLFW]]
 ## Rendering
-[[Image Formation]]
+[[Viewing Transformations]]
 [[Rasterization]]
 [[Transformations]]
