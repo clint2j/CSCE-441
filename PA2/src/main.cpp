@@ -10,6 +10,8 @@
 #include <optional>
 #include <utility>
 #include <vector>
+
+#include "Robot.h"
 using std::pair;
 
 using mousePos = std::optional<glm::vec2>;
@@ -188,7 +190,7 @@ class RobotElements
     // std::shared_ptr<bodyPart> next() { return child; }
 };
 
-RobotElements robot;
+Robot robot;
 
 void Display()
 {
@@ -227,7 +229,7 @@ void Display()
     // DrawCube(modelViewProjectionMatrix.topMatrix());
     // modelViewProjectionMatrix.popMatrix();
 
-    robot.draw();
+    robot.draw(modelViewProjectionMatrix, program);
 
     modelViewProjectionMatrix.popMatrix();
 
@@ -250,7 +252,7 @@ void CursorPositionCallback(GLFWwindow *lWindow, double xpos, double ypos)
 {
     int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
     int state2 = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-    glm::vec4 viewDirection = glm::vec4(glm::normalize(center - eye), 0.0f);
+    glm::vec3 viewDirection = glm::normalize(center - eye);
     glm::vec3 right = glm::cross(glm::vec3(viewDirection), glm::vec3(up));
     right = glm::normalize(right);
     glm::vec2 currMouse = {xpos, ypos};
@@ -270,15 +272,17 @@ void CursorPositionCallback(GLFWwindow *lWindow, double xpos, double ypos)
             eye = glm::vec3(rotationMatrix * glm::vec4(eye, 1.0f));
         }
     } else if (state2 == GLFW_PRESS) {
-        // if (diff.x != 0) {
-        //     glm::mat4 movementMatrix = glm::translate(glm::mat4(1.0f), (glm::vec3(diff.x * .06, 0, 0)));
-        //     eye = glm::vec3(movementMatrix * glm::vec4(eye, 1.0f));
-        //     center = glm::vec3(movementMatrix * glm::vec4(center, 1.0f));
-        // } else if (diff.y != 0) {
-        //     glm::mat4 movementMatrix = glm::translate(glm::mat4(1.0f), (glm::vec3(0, diff.y * .06, 0)));
-        //     eye = glm::vec3(movementMatrix * glm::vec4(eye, 1.0f));
-        //     center = glm::vec3(movementMatrix * glm::vec4(center, 1.0f));
-        // }
+        if (diff.x != 0) {
+            auto translateMatrix = glm::translate(glm::mat4(1.0f), right * (float)(diff.y * .6));
+            eye = glm::vec3(translateMatrix * glm::vec4(eye, 1.0f));
+            center = glm::vec3(translateMatrix * glm::vec4(center, 1.0f));
+        }
+        if (diff.y != 0) {
+            glm::vec3 up = glm::normalize(glm::cross(viewDirection, right));
+            auto translateMatrix = glm::translate(glm::mat4(1.0f), up * (float)(diff.y * .6));
+            eye = glm::vec3(translateMatrix * glm::vec4(eye, 1.0f));
+            center = glm::vec3(translateMatrix * glm::vec4(center, 1.0f));
+        }
     }
     lastMousePos = currMouse;
 }
@@ -286,32 +290,27 @@ void CursorPositionCallback(GLFWwindow *lWindow, double xpos, double ypos)
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
     std::cout << "scrolled: (" << xoffset << ", " << yoffset << ")\n";
-    // glm::vec4 viewDirection = glm::vec4(glm::normalize(eye - center), 0.0f);
-    // glm::mat4 scaleMatrix = glm::scale(
-    //     glm::mat4(1.0f), {1 - (yoffset * .02), 1 - (yoffset * .02), 1 -
-    //     (yoffset * .02)});lowerRightLeg
-    // viewDirection = scaleMatrix * viewDirection;
-    // // viewDirection /= viewDirection.w;
-    // // glm::vec3 newEye = center + glm::vec3(viewDirection);
-    // std::cout << "old eye: " << eye.x << eye.y << eye.z << '\n';
-    // eye = center + glm::vec3(viewDirection);
-    // std::cout << "new eye: " << eye.x << eye.y << eye.z << '\n';
-    // std::cout << "center: " << center.x << center.y << center.z << '\n';
+
+    // Calculate the current view direction
+    glm::vec3 viewDirection = glm::normalize(eye - center);
+
+    // Modify the eye position based on yoffset
+    eye -= viewDirection * static_cast<float>(yoffset) * 0.5f;
 }
 
 // Keyboard character callback function
 void CharacterCallback(GLFWwindow *lWindow, unsigned int key)
 {
     std::cout << "Key " << (char)key << " is pressed." << std::endl;
-    if (key == 'f') {
-        robot.rotateY(glm::radians(45.0f));
-    } else if (key == 'g') {
-        robot.select();
-    } else if (key == '.') {
-        robot.next();
-    } else if (key == 'm') {
-        robot.unSelect();
-    }
+    // if (key == 'f') {
+    //     robot.rotateY(glm::radians(45.0f));
+    // } else if (key == 'g') {
+    //     robot.select();
+    // } else if (key == '.') {
+    //     robot.next();
+    // } else if (key == 'm') {
+    //     robot.unSelect();
+    // }
 }
 
 void CreateCube()
