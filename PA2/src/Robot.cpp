@@ -44,11 +44,118 @@ void RobotNode::draw(MatrixStack &modelViewProjectionMatrix, Program &program)
     modelViewProjectionMatrix.popMatrix();
 }
 
+void RobotNode::rotateZ(float z_rotate) { rc.z += z_rotate; }
+
+void RobotNode::rotateY(float y_rotate) { rc.y += y_rotate; }
+
+void RobotNode::rotateX(float x_rotate) { rc.x += x_rotate; }
+
+void RobotNode::select()
+{
+    sp.x *= 1.1;
+    sp.y *= 1.1;
+    sp.z *= 1.1;
+}
+
+void RobotNode::unSelect()
+{
+    sp.x /= 1.1;
+    sp.y /= 1.1;
+    sp.z /= 1.1;
+}
+
 void Robot::draw(MatrixStack &stack, Program &program) { root->draw(stack, program); }
 
 void Robot::next()
 {
-    if (current && current->children.size() > 0) {
-        current = current->children[0];
+    if (current) {
+        current->unSelect();
+    } else {
+        current = root;
+        current->select();
+        return;
+    }
+    if (level == 0) {
+        level = 1;
+        num = 0;
+        current = current->children[num++];
+    } else if (level == 1) {
+        if (current->children.size() > 0) {
+            level = 2;
+            current = current->children[0];
+        } else {
+            if (num < root->children.size()) {
+                current = root->children[num++];
+            } else {
+                level = 0;
+                current = nullptr;
+            }
+        }
+    } else {
+        level = 1;
+        if (num < root->children.size()) {
+            current = root->children[num++];
+        } else {
+            level = 0;
+            current = nullptr;
+        }
+    }
+    if (current) {
+        current->select();
+    }
+}
+
+void Robot::prev()
+{
+    if (current) {
+        current->unSelect();
+    } else {
+        num = 4;
+        level = 2;
+        current = root->children[num]->children[0];
+        current->select();
+        return;
+    }
+    if (level == 0) {
+        current = nullptr;
+    } else if (level == 1) {
+        if (num == 0) {
+            current = root;
+            level = 0;
+        } else if (num == 1) {
+            current = root->children[0];
+            num = 0;
+        } else {
+            level = 2;
+            --num;
+            current = root->children[num]->children[0];
+        }
+    } else {
+        level = 1;
+        current = root->children[num];
+    }
+    if (current) {
+        current->select();
+    }
+}
+
+void Robot::rotateZ(float z_rotate)
+{
+    if (current) {
+        current->rotateZ(z_rotate);
+    }
+}
+
+void Robot::rotateY(float y_rotate)
+{
+    if (current) {
+        current->rotateY(y_rotate);
+    }
+}
+
+void Robot::rotateX(float x_rotate)
+{
+    if (current) {
+        current->rotateX(x_rotate);
     }
 }

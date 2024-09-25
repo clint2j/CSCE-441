@@ -302,15 +302,32 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 void CharacterCallback(GLFWwindow *lWindow, unsigned int key)
 {
     std::cout << "Key " << (char)key << " is pressed." << std::endl;
-    // if (key == 'f') {
-    //     robot.rotateY(glm::radians(45.0f));
-    // } else if (key == 'g') {
-    //     robot.select();
-    // } else if (key == '.') {
-    //     robot.next();
-    // } else if (key == 'm') {
-    //     robot.unSelect();
-    // }
+    switch (key) {
+        case '.':
+            robot.next();
+            break;
+        case ',':
+            robot.prev();
+            break;
+        case 'x':
+            robot.rotateX(glm::radians(-15.0f));
+            break;
+        case 'X':
+            robot.rotateX(glm::radians(15.0f));
+            break;
+        case 'y':
+            robot.rotateY(glm::radians(-15.0f));
+            break;
+        case 'z':
+            robot.rotateZ(glm::radians(-15.0f));
+            break;
+        case 'Z':
+            robot.rotateZ(glm::radians(15.0f));
+            break;
+        case 'Y':
+            robot.rotateY(glm::radians(15.0f));
+            break;
+    }
 }
 
 void CreateCube()
