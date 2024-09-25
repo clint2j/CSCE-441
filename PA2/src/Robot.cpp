@@ -11,18 +11,18 @@ Robot::Robot() : current(nullptr)
         std::make_shared<RobotNode>(glm::vec3(-.7, 0, 0), glm::vec3(.7, .3, .3), glm::vec3(-.8, .5, 0)));
     root->children.emplace_back(
         std::make_shared<RobotNode>(glm::vec3(.7, 0, 0), glm::vec3(.7, .3, .3), glm::vec3(.8, .5, 0)));
-    root->children.emplace_back(
-        std::make_shared<RobotNode>(glm::vec3(0, 0, 0), glm::vec3(.32, .7, .32), glm::vec3(-.48, -2, 0)));
-    root->children.emplace_back(
-        std::make_shared<RobotNode>(glm::vec3(0, 0, 0), glm::vec3(.32, .7, .32), glm::vec3(.48, -2, 0)));
+    root->children.emplace_back(std::make_shared<RobotNode>(glm::vec3(0, -.65, 0), glm::vec3(.32, .7, .32),
+                                                            glm::vec3(-.48, -1.35, 0)));
+    root->children.emplace_back(std::make_shared<RobotNode>(glm::vec3(0, -.65, 0), glm::vec3(.32, .7, .32),
+                                                            glm::vec3(.48, -1.35, 0)));
     root->children[1]->children.emplace_back(
-        std::make_shared<RobotNode>(glm::vec3(-1.10, 0, 0), glm::vec3(.5, .25, .25), glm::vec3(-.8, 0, 0)));
+        std::make_shared<RobotNode>(glm::vec3(-.5, 0, 0), glm::vec3(.5, .25, .25), glm::vec3(-1.4, 0, 0)));
     root->children[2]->children.emplace_back(
-        std::make_shared<RobotNode>(glm::vec3(1.10, 0, 0), glm::vec3(.5, .25, .25), glm::vec3(.8, 0, 0)));
+        std::make_shared<RobotNode>(glm::vec3(.5, 0, 0), glm::vec3(.5, .25, .25), glm::vec3(1.4, 0, 0)));
     root->children[3]->children.emplace_back(
-        std::make_shared<RobotNode>(glm::vec3(0, 0, 0), glm::vec3(.27, .7, .27), glm::vec3(0, -1.4, 0)));
+        std::make_shared<RobotNode>(glm::vec3(0, -.65, 0), glm::vec3(.27, .7, .27), glm::vec3(0, -1.4, 0)));
     root->children[4]->children.emplace_back(
-        std::make_shared<RobotNode>(glm::vec3(0, 0, 0), glm::vec3(.27, .7, .27), glm::vec3(0, -1.4, 0)));
+        std::make_shared<RobotNode>(glm::vec3(0, -.65, 0), glm::vec3(.27, .7, .27), glm::vec3(0, -1.4, 0)));
 }
 
 void RobotNode::draw(MatrixStack &modelViewProjectionMatrix, Program &program)
@@ -128,11 +128,11 @@ void Robot::prev()
         } else {
             level = 2;
             --num;
-            current = root->children[num]->children[0];
+            current = root->children[--num]->children[0];
         }
     } else {
         level = 1;
-        current = root->children[num];
+        current = root->children[--num];
     }
     if (current) {
         current->select();
