@@ -68,6 +68,7 @@ void Robot::draw(MatrixStack &stack, Program &program) { root->draw(stack, progr
 
 void Robot::next()
 {
+
     if (current) {
         current->unSelect();
     } else {
@@ -77,15 +78,15 @@ void Robot::next()
     }
     if (level == 0) {
         level = 1;
-        num = 0;
-        current = current->children[num++];
+        num = -1;
+        current = current->children[++num];
     } else if (level == 1) {
         if (current->children.size() > 0) {
             level = 2;
             current = current->children[0];
         } else {
-            if (num < root->children.size()) {
-                current = root->children[num++];
+            if (num < root->children.size() - 1) {
+                current = root->children[++num];
             } else {
                 level = 0;
                 current = nullptr;
@@ -93,8 +94,8 @@ void Robot::next()
         }
     } else {
         level = 1;
-        if (num < root->children.size()) {
-            current = root->children[num++];
+        if (num < root->children.size() - 1) {
+            current = root->children[++num];
         } else {
             level = 0;
             current = nullptr;
@@ -103,6 +104,7 @@ void Robot::next()
     if (current) {
         current->select();
     }
+    std::cout << "num: " << num << " level: " << level << '\n';
 }
 
 void Robot::prev()
@@ -127,16 +129,16 @@ void Robot::prev()
             num = 0;
         } else {
             level = 2;
-            --num;
             current = root->children[--num]->children[0];
         }
     } else {
         level = 1;
-        current = root->children[--num];
+        current = root->children[num];
     }
     if (current) {
         current->select();
     }
+    std::cout << "num: " << num << " level: " << level << '\n';
 }
 
 void Robot::rotateZ(float z_rotate)
