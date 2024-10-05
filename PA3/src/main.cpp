@@ -60,7 +60,6 @@ void Display()
 
 void randColorEachTriangle()
 {
-    std::cout << "Rand Color Each Tri\n";
     for (auto &t : triangleVector) {
         glm::vec3 color = {colorDist(rng) * 1.0f / 255.0f, colorDist(rng) * 1.0f / 255.0f,
                            colorDist(rng) * 1.0f / 255.0f};
@@ -70,7 +69,6 @@ void randColorEachTriangle()
 
 void randColorEachVertex()
 {
-    std::cout << "Rand Color Each Vertex\n";
     for (auto &t : triangleVector) {
         std::array<glm::vec3, 3> arr;
         for (auto &v : arr) {
@@ -83,7 +81,6 @@ void randColorEachVertex()
 
 void colorByZ()
 {
-    std::cout << "Color by Z\n";
     float minV = 1e9, maxV = -1e9;
     for (auto v : triangleVector) {
         minV = std::min(v.getMinZ(), minV);
@@ -186,7 +183,7 @@ void Init()
     ClearFrameBuffer();
 
     std::vector<glm::vec3> vertices;
-    LoadModel(resource_path + "/sphere.obj", vertices);
+    LoadModel(resource_path + "/bunny.obj", vertices);
     CreateTriangleVector(vertices);
 
     std::random_device r;
