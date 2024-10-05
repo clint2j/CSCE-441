@@ -11,16 +11,18 @@
 class Triangle
 {
   private:
-    glm::vec3 v[3]; // Triangle vertices
-    glm::vec3 c[3]; // Vertex color
+    // glm::vec3 v[3]; // Triangle vertices
+    // glm::vec3 c[3]; // Vertex color
+    std::array<glm::vec3, 3> v;
+    std::array<glm::vec3, 3> c;
     std::vector<std::array<glm::vec4, 3>> getClippedTriangles(std::array<glm::vec4, 3> startingTriangle,
                                                               int width, int height);
 
     void rasterize(std::array<glm::vec3, 3> tri, std::array<glm::vec3, 3> triColors, float *color,
                    float *depth, int height, int width);
 
-    std::optional<std::array<glm::vec3, 3>> getColor(std::array<glm::vec3, 3> tri,
-                                                     std::array<glm::vec3, 3> triColors, int x, int y);
+    std::optional<std::pair<glm::vec3,float>> getColor(std::array<glm::vec3, 3> tri, std::array<glm::vec3, 3> triColors,
+                                         int x, int y);
 
   public:
     // Constructor

@@ -49,6 +49,7 @@ void Display()
                 depth[r][c] = 1e9;
             }
         }
+        ClearFrameBuffer();
         for (std::size_t i = 0; i < triangleVector.size(); i++)
             triangleVector[i].RenderCPU(modelViewMatrix, projectionMatrix, &color[0][0][0], &depth[0][0],
                                         WINDOW_HEIGHT, WINDOW_WIDTH);
@@ -185,7 +186,7 @@ void Init()
     ClearFrameBuffer();
 
     std::vector<glm::vec3> vertices;
-    LoadModel(resource_path + "/bunny.obj", vertices);
+    LoadModel(resource_path + "/sphere.obj", vertices);
     CreateTriangleVector(vertices);
 
     std::random_device r;
