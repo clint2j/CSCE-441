@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <random>
 #include <string>
 #include <vector>
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -17,6 +18,11 @@
 
 GLFWwindow *window;
 std::string resource_path = "";
+
+enum class ColorMode { RandTriangle, RandVertices, ZVertices };
+
+std::uniform_int_distribution<int> colorDist(0, 255);
+std::mt19937 rng;
 
 float color[WINDOW_HEIGHT][WINDOW_WIDTH][3];
 float depth[WINDOW_HEIGHT][WINDOW_WIDTH];
@@ -35,13 +41,56 @@ void Display()
                                             glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
     if (isOpenGL) {
-        for (int i = 0; i < triangleVector.size(); i++)
+        for (std::size_t i = 0; i < triangleVector.size(); i++)
             triangleVector[i].RenderOpenGL(modelViewMatrix, projectionMatrix);
     } else {
-        for (int i = 0; i < triangleVector.size(); i++)
-            triangleVector[i].RenderCPU();
+        for (int r = 0; r < WINDOW_HEIGHT; ++r) {
+            for (int c = 0; c < WINDOW_WIDTH; ++c) {
+                depth[r][c] = 1e9;
+            }
+        }
+        for (std::size_t i = 0; i < triangleVector.size(); i++)
+            triangleVector[i].RenderCPU(modelViewMatrix, projectionMatrix, &color[0][0][0], &depth[0][0],
+                                        WINDOW_HEIGHT, WINDOW_WIDTH);
 
         glDrawPixels(WINDOW_WIDTH, WINDOW_HEIGHT, GL_RGB, GL_FLOAT, &color[0][0][0]);
+    }
+}
+
+void randColorEachTriangle()
+{
+    std::cout << "Rand Color Each Tri\n";
+    for (auto &t : triangleVector) {
+        glm::vec3 color = {colorDist(rng) * 1.0f / 255.0f, colorDist(rng) * 1.0f / 255.0f,
+                           colorDist(rng) * 1.0f / 255.0f};
+        t.ChangeColor({color, color, color});
+    }
+}
+
+void randColorEachVertex()
+{
+    std::cout << "Rand Color Each Vertex\n";
+    for (auto &t : triangleVector) {
+        std::array<glm::vec3, 3> arr;
+        for (auto &v : arr) {
+            v = {colorDist(rng) * 1.0f / 255.0f, colorDist(rng) * 1.0f / 255.0f,
+                 colorDist(rng) * 1.0f / 255.0f};
+        }
+        t.ChangeColor(arr);
+    }
+}
+
+void colorByZ()
+{
+    std::cout << "Color by Z\n";
+    float minV = 1e9, maxV = -1e9;
+    for (auto v : triangleVector) {
+        minV = std::min(v.getMinZ(), minV);
+        maxV = std::max(v.getMaxZ(), maxV);
+    }
+    std::cout << maxV << " , " << minV << '\n';
+    for (auto &v : triangleVector) {
+        v.ChangeColorByZ(minV, maxV);
     }
 }
 
@@ -61,12 +110,15 @@ void CharacterCallback(GLFWwindow *lWindow, unsigned int key)
         case 'q':
             glfwSetWindowShouldClose(window, GLFW_TRUE);
             break;
-		case 'a':
-		    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(diff.x), up);
-            eye = glm::vec3(rotationMatrix * glm::vec4(eye, 1.0f));
-		break;
-		case 'd':
-		break;
+        case '0':
+            randColorEachTriangle();
+            break;
+        case '1':
+            randColorEachVertex();
+            break;
+        case '2':
+            colorByZ();
+            break;
         default:
             break;
     }
@@ -74,7 +126,7 @@ void CharacterCallback(GLFWwindow *lWindow, unsigned int key)
 
 void CreateTriangleVector(std::vector<glm::vec3> &vertices)
 {
-    for (int i = 0; i < vertices.size() / 3; i++) {
+    for (std::size_t i = 0; i < vertices.size() / 3; i++) {
         Triangle myTriangle(vertices[i * 3 + 0], vertices[i * 3 + 1], vertices[i * 3 + 2]);
         triangleVector.push_back(myTriangle);
     }
@@ -135,6 +187,9 @@ void Init()
     std::vector<glm::vec3> vertices;
     LoadModel(resource_path + "/bunny.obj", vertices);
     CreateTriangleVector(vertices);
+
+    std::random_device r;
+    rng = std::mt19937(r());
 }
 
 int main(int argc, char *argv[])
