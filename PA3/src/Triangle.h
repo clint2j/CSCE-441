@@ -2,6 +2,7 @@
 
 #include <array>
 #include <math.h>
+#include <optional>
 #include <stdlib.h>
 #include <vector>
 
@@ -14,6 +15,12 @@ class Triangle
     glm::vec3 c[3]; // Vertex color
     std::vector<std::array<glm::vec4, 3>> getClippedTriangles(std::array<glm::vec4, 3> startingTriangle,
                                                               int width, int height);
+
+    void rasterize(std::array<glm::vec3, 3> tri, std::array<glm::vec3, 3> triColors, float *color,
+                   float *depth, int height, int width);
+
+    std::optional<std::array<glm::vec3, 3>> getColor(std::array<glm::vec3, 3> tri,
+                                                     std::array<glm::vec3, 3> triColors, int x, int y);
 
   public:
     // Constructor

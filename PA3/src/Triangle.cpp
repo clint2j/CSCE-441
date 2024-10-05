@@ -14,6 +14,17 @@ std::vector<std::array<glm::vec4, 3>> Triangle::getClippedTriangles(std::array<g
     return {startingTriangle};
 }
 
+void Triangle::rasterize(std::array<glm::vec3, 3> tri, std::array<glm::vec3, 3> triColors, float *color,
+                         float *depth, int height, int width)
+{
+}
+
+std::optional<std::array<glm::vec3, 3>> Triangle::getColor(std::array<glm::vec3, 3> tri,
+                                                           std::array<glm::vec3, 3> triColors, int x, int y)
+{
+    return std::optional<std::array<glm::vec3, 3>>();
+}
+
 Triangle::Triangle(glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2)
 {
     v[0] = v0;
@@ -23,7 +34,6 @@ Triangle::Triangle(glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2)
     c[0] = glm::vec3(1.0f, 1.0f, 1.0f);
     c[1] = glm::vec3(1.0f, 1.0f, 1.0f);
     c[2] = glm::vec3(1.0f, 1.0f, 1.0f);
-    std::cout << "Made a triangle!!!!\n";
 }
 
 // Rendering the triangle using OpenGL
@@ -60,7 +70,6 @@ void Triangle::RenderCPU(glm::mat4 &modelViewMatrix, glm::mat4 &projectionMatrix
     std::vector<std::array<glm::vec4, 3>> clippedTriangles
         = getClippedTriangles(clipSpaceVertex, windowWidth, windowHeight);
 
-    
     std::vector<std::array<glm::vec3, 3>> screenSpaceTriangles;
     glm::vec4 viewport = {0, 0, windowWidth, windowHeight};
     for (auto const &tri : clippedTriangles) {
@@ -71,7 +80,8 @@ void Triangle::RenderCPU(glm::mat4 &modelViewMatrix, glm::mat4 &projectionMatrix
         }
         screenSpaceTriangles.push_back(screenTri);
     }
-    //rasterization time!!!
+    // rasterization time!!!
+    // rasterize()
     for (auto v : screenSpaceTriangles) {
         for (auto vv : v) {
             // Round to nearest pixel
