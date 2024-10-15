@@ -183,7 +183,7 @@ void Init()
     ClearFrameBuffer();
 
     std::vector<glm::vec3> vertices;
-    LoadModel(resource_path + "/bunny.obj", vertices);
+    LoadModel(resource_path + "/duck.obj", vertices);
     CreateTriangleVector(vertices);
 
     std::random_device r;
