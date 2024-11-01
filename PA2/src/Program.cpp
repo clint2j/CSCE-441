@@ -1,6 +1,6 @@
 #include "Program.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
 
@@ -12,7 +12,7 @@ Program::~Program()
 {
 }
 
-void Program::SetShadersFileName(const std::string &vFileName, const std::string &sFileName)
+void Program::SetShadersFileName(const std::string& vFileName, const std::string& sFileName)
 {
 	vertexShaderFileName = vFileName;
 	fragmentShaderFileName = sFileName;
@@ -73,7 +73,7 @@ void Program::Init()
 	}
 }
 
-std::string Program::ReadShader(const std::string &name)
+std::string Program::ReadShader(const std::string& name)
 {
 	GLint status;
 
@@ -84,7 +84,7 @@ std::string Program::ReadShader(const std::string &name)
 	ifs.open(name);
 	if (!ifs) {
 		std::cerr << "Failed to open the shader file:" << name << std::endl;
-		return 0;
+		return "";
 	}
 	ss << ifs.rdbuf();
 	ifs.close();
@@ -124,7 +124,7 @@ void Program::SendUniformData(glm::vec3 input, const char* name)
 }
 
 //send a matrix to the shader.
-void Program::SendUniformData(glm::mat4 &input, const char* name)
+void Program::SendUniformData(glm::mat4& input, const char* name)
 {
 	glUniformMatrix4fv(glGetUniformLocation(programID, name), 1, GL_FALSE, &input[0][0]);
 }
