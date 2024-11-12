@@ -23,11 +23,10 @@ uniform vec3 kd;
 uniform vec3 ks;
 uniform float s;
 
+
 void main()
 {
-    vec4 worldPos = model * vec4(vPositionModel, 1.0);
-    fragPosition = worldPos.xyz;
-    fragNormal = vec3(model * vec4(vNormalModel,1.0));
-
+    fragPosition = vPositionModel;
+    fragNormal = vNormalModel;
 	gl_Position = projection * view * model * vec4(vPositionModel, 1.0);
 }
