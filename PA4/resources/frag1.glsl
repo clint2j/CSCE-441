@@ -1,7 +1,7 @@
 #version 120
 
-varying vec3 fragPosition;  // Position in world space
-varying vec3 fragNormal;    // Normal in world space
+varying vec3 fragPosition;
+varying vec3 fragNormal;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -34,6 +34,4 @@ void main()
 		I += lights[i].color * (kd * diffuse + ks * specular);
 	}
 	gl_FragColor = vec4(I,1.0f);
-	// vec3 normalizedPos = normalize(fragPosition);
-    // gl_FragColor = vec4(normalizedPos * 0.5 + 0.5, 1.0);
 }

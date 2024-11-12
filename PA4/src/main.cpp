@@ -89,6 +89,7 @@ void Display()
 	program.SendUniformData(materials[currMaterial].kd, "kd");
 	program.SendUniformData(materials[currMaterial].ks, "ks");
 	program.SendUniformData(materials[currMaterial].s, "s");
+	program.SendUniformData(eye, "eye");
 
 	glDrawArrays(GL_TRIANGLES, 0, posBuff.size() / 3);
 	program.Unbind();

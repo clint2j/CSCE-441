@@ -7,8 +7,8 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-varying vec3 fragPosition;  // Position in world space
-varying vec3 fragNormal;    // Normal in world space
+varying vec3 fragPosition;
+varying vec3 fragNormal;
 
 struct lightStruct {
     vec3 position;
