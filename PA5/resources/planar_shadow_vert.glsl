@@ -23,14 +23,17 @@ varying vec3 color;
 
 void main() {
     color = vec3(0,0,0);
-    vec3 p1 = p_ground - lights[0].position;
-    float num = dot(p1,n_ground);
-    vec4 pt = projection * view * model * vec4(vPositionModel, 1.0);
-    float scaleFactor = 1.0f/pt.w;
-    vec3 pt2 = vec3(scaleFactor * pt);
-    vec3 d = normalize(pt2-lights[0].position);
-    float denom = dot(d,n_ground);
-    float t = num/denom;
-    vec3 finalPt = lights[0].position+.999*t*d;
-    gl_Position = vec4(finalPt,1.0f);
+    vec3 lightToGround  = p_ground - lights[0].position;
+    float num = dot(lightToGround ,n_ground);
+    vec4 vertexWorldSpace  = model * vec4(vPositionModel, 1.0);
+    vec3 lightToVertexDir  = normalize(vertexWorldSpace .xyz-lights[0].position);
+    float denom = dot(lightToVertexDir,n_ground);
+    if (abs(denom) > 0.0001){
+        float t = num/denom;
+        vec3 intersectionPoint = lights[0].position+.9999*t*lightToVertexDir;
+        gl_Position = projection * view * vec4(intersectionPoint,1.0);
+    }
+    else {
+        gl_Position = vec4(2,2,2,1.0);
+    }
 }
