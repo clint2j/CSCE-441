@@ -50,7 +50,8 @@ struct LightStruct {
 std::array<MaterialStruct, NUM_MATERIALS> materials;
 std::array<LightStruct, NUM_LIGHTS> lights;
 
-
+glm::vec3 n_ground;
+glm::vec3 p_ground;
 
 void Display()
 {
@@ -91,7 +92,7 @@ void Display()
 		prog[0].SendUniformData(materials[0].kd, "kd");
 		prog[0].SendUniformData(materials[0].ks, "ks");
 		prog[0].SendUniformData(materials[0].s, "s");
-		prog[0].SendUniformData(eye, "eye");
+		//prog[0].SendUniformData(eye, "eye");
 
 		for (int i = 0; i < mainObjs.size(); i++)
 		{
@@ -112,6 +113,24 @@ void Display()
 		ground.Draw(prog[0]);
 
 		prog[0].Unbind();
+
+		//Shadow time!
+		prog[1].Bind();
+		prog[1].SendUniformData(viewMatrix, "view");
+		prog[1].SendUniformData(projectionMatrix, "projection");
+		prog[1].SendUniformData(lights[0].position, "lights[0].position");
+		prog[1].SendUniformData(lights[0].color, "lights[0].color");
+		prog[1].SendUniformData(eye, "eye");
+		prog[1].SendUniformData(n_ground, "n_ground");
+		prog[1].SendUniformData(p_ground, "p_ground");
+
+
+		for (int i = 0; i < mainObjs.size(); i++)
+		{
+			prog[1].SendUniformData(mainObjs[i].GetModelMatrix(), "model");
+			mainObjs[i].Draw(prog[1]);
+		}
+		prog[1].Unbind();
 	}
 	else
 	{
@@ -264,6 +283,9 @@ void setInitalLightAndMaterials() {
 
 	lights[0].position = { 0,5,1 };
 	lights[0].color = { .5,.5,.5 };
+
+	n_ground = { 0,1,0 };
+	p_ground = { 0,0,0 };
 }
 
 void Init()
