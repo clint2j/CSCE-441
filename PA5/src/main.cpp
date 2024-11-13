@@ -53,7 +53,7 @@ std::array<LightStruct, NUM_LIGHTS> lights;
 glm::vec3 n_ground;
 glm::vec3 p_ground;
 
-void Display()
+static void Display()
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -107,7 +107,6 @@ void Display()
 		prog[0].SendUniformData(materials[1].kd, "kd");
 		prog[0].SendUniformData(materials[1].ks, "ks");
 		prog[0].SendUniformData(materials[1].s, "s");
-		prog[0].SendUniformData(eye, "eye");
 
 		prog[0].SendUniformData(ground.GetModelMatrix(), "model");
 		ground.Draw(prog[0]);
@@ -149,14 +148,17 @@ void Display()
 		prog[2].SendUniformData(viewMatrix, "view");
 		prog[2].SendUniformData(projectionMatrix, "projection");
 
+		prog[2].SendUniformData(lights[0].position, "lights[0].position");
+		prog[2].SendUniformData(lights[0].color, "lights[0].color");
+
 		for (int i = 0; i < mainObjs.size(); i++)
 		{
 			prog[2].SendUniformData(mainObjs[i].GetModelMatrix(), "model");
 			mainObjs[i].Draw(prog[2]);
 		}
 
-		prog[2].SendUniformData(ground.GetModelMatrix(), "model");
-		ground.Draw(prog[2]);
+		//prog[2].SendUniformData(ground.GetModelMatrix(), "model");
+		//ground.Draw(prog[2]);
 
 		prog[2].Unbind();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -181,6 +183,13 @@ void Display()
 		prog[3].SendUniformData(viewMatrix, "view");
 		prog[3].SendUniformData(projectionMatrix, "projection");
 
+		prog[3].SendUniformData(lights[0].position, "lights[0].position");
+		prog[3].SendUniformData(lights[0].color, "lights[0].color");
+
+		prog[3].SendUniformData(materials[0].ka, "ka");
+		prog[3].SendUniformData(materials[0].kd, "kd");
+		prog[3].SendUniformData(materials[0].ks, "ks");
+		prog[3].SendUniformData(materials[0].s, "s");
 
 		for (int i = 0; i < mainObjs.size(); ++i)
 		{
@@ -192,8 +201,13 @@ void Display()
 		/// Otherwise, the whole screen will be rendered red because of the ground.
 		/// Uncomment once you start implementing the approach.
 
-		//prog[3].SendUniformData(ground.GetModelMatrix(), "model");
-		//ground.Draw(prog[3]);
+		prog[3].SendUniformData(materials[1].ka, "ka");
+		prog[3].SendUniformData(materials[1].kd, "kd");
+		prog[3].SendUniformData(materials[1].ks, "ks");
+		prog[3].SendUniformData(materials[1].s, "s");
+
+		prog[3].SendUniformData(ground.GetModelMatrix(), "model");
+		ground.Draw(prog[3]);
 
 		prog[3].Unbind();
 
@@ -236,7 +250,7 @@ void Display()
 }
 
 // Keyboard character callback function
-void CharacterCallback(GLFWwindow* lWindow, unsigned int key)
+static void CharacterCallback(GLFWwindow* lWindow, unsigned int key)
 {
 	switch (key) {
 
@@ -269,7 +283,7 @@ void CharacterCallback(GLFWwindow* lWindow, unsigned int key)
 	}
 }
 
-void setInitalLightAndMaterials() {
+static void setInitalLightAndMaterials() {
 	materials[0].ka = { .2,.2,.2 };
 	materials[0].kd = { .8,.7,.7 };
 	materials[0].ks = { 1,1,1 };
@@ -287,7 +301,7 @@ void setInitalLightAndMaterials() {
 	p_ground = { 0,0,0 };
 }
 
-void Init()
+static void Init()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);

@@ -6,7 +6,6 @@ attribute vec3 vNormalModel;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform vec3 eye;
 uniform vec3 n_ground;
 uniform vec3 p_ground;
 
