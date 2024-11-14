@@ -145,11 +145,17 @@ static void Display()
 
 		prog[2].Bind();
 
-		prog[2].SendUniformData(viewMatrix, "view");
-		prog[2].SendUniformData(projectionMatrix, "projection");
+		//creating view matrix from light
+		glm::vec3 direction = glm::normalize(glm::vec3(0) - lights[0].position);
+		glm::vec3 right = glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f)));
+		glm::vec3 up = glm::normalize(glm::cross(right, direction));
+		glm::mat4 lightView = glm::lookAt(lights[0].position, lights[0].position + direction, up);
 
-		prog[2].SendUniformData(lights[0].position, "lights[0].position");
-		prog[2].SendUniformData(lights[0].color, "lights[0].color");
+		//creating new perspective matrix
+		glm::mat4 lightProjection = glm::perspective(glm::radians(60.0f), SHADOW_WIDTH / (float)SHADOW_HEIGHT, 1.0f, 15.0f);
+
+		prog[2].SendUniformData(lightView, "view");
+		prog[2].SendUniformData(lightProjection, "projection");
 
 		for (int i = 0; i < mainObjs.size(); i++)
 		{
@@ -157,10 +163,11 @@ static void Display()
 			mainObjs[i].Draw(prog[2]);
 		}
 
-		//prog[2].SendUniformData(ground.GetModelMatrix(), "model");
-		//ground.Draw(prog[2]);
+		prog[2].SendUniformData(ground.GetModelMatrix(), "model");
+		ground.Draw(prog[2]);
 
 		prog[2].Unbind();
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// 2. Render scene as normal with shadow mapping (using depth map)
@@ -178,10 +185,9 @@ static void Display()
 		glBindTexture(GL_TEXTURE_2D, shadowMap);
 		glUniform1i(glGetUniformLocation(prog[3].GetPID(), "shadowMap"), unit);
 
-
-
 		prog[3].SendUniformData(viewMatrix, "view");
 		prog[3].SendUniformData(projectionMatrix, "projection");
+		prog[3].SendUniformData(lightProjection * lightView, "lightViewProjection");
 
 		prog[3].SendUniformData(lights[0].position, "lights[0].position");
 		prog[3].SendUniformData(lights[0].color, "lights[0].color");
