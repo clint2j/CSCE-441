@@ -29,5 +29,5 @@ private:
 	float focalDistance;
 
 	float* renderedImage;
-	std::optional<glm::vec3> ComputeRayColor(Ray ray, float t0, float t1, Scene* scene);
+	glm::vec3 ComputeRayColor(Ray ray, float t0, float t1, Scene* scene, int recursiveDepth);
 };

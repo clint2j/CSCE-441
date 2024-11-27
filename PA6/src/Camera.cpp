@@ -1,7 +1,7 @@
 #include "Camera.h"
 
-constexpr float myINF = 50000;
-constexpr float myZero = 0.0000001;
+constexpr float myINF = 5000000;
+constexpr float myZero = 0.00001;
 //Camera::Camera(int _widthRes, int _heightRes, const glm::vec3& _eye, const glm::vec3& _lookAt, const glm::vec3& _up, float _fovY, float _focalDistance)
 //{
 //}
@@ -44,13 +44,11 @@ void Camera::TakePicture(Scene* scene)
 			float y = v * (imageHeight / 2.0f);
 			glm::vec3 rayDirection = glm::normalize(glm::vec3(x, y, -focalDistance));
 			Ray ray(eye, rayDirection);
-			auto rayColor = ComputeRayColor(ray, 0, myINF, scene);
-			if (rayColor) {
-				int index = (j * widthRes + i) * 3;
-				renderedImage[index] = rayColor->r;     // R
-				renderedImage[index + 1] = rayColor->g; // G
-				renderedImage[index + 2] = rayColor->b; // B
-			}
+			auto rayColor = ComputeRayColor(ray, 0, myINF, scene, 0);
+			int index = (j * widthRes + i) * 3;
+			renderedImage[index] = rayColor.r;     // R
+			renderedImage[index + 1] = rayColor.g; // G
+			renderedImage[index + 2] = rayColor.b; // B
 		}
 	}
 	//for (int i = 0; i < 100; ++i) {
@@ -61,8 +59,11 @@ void Camera::TakePicture(Scene* scene)
 	//}
 }
 
-std::optional<glm::vec3> Camera::ComputeRayColor(Ray ray, float t0, float t1, Scene* scene)
+glm::vec3 Camera::ComputeRayColor(Ray ray, float t0, float t1, Scene* scene, int recursiveDepth)
 {
+	if (recursiveDepth > 4) {
+		return glm::vec3(0, 0, 0);
+	}
 	MaterialRecord rec;
 	glm::vec3 color{ 0,0,0 };
 	float t = scene->Hit(ray, t0, t1, rec);
@@ -84,6 +85,11 @@ std::optional<glm::vec3> Camera::ComputeRayColor(Ray ray, float t0, float t1, Sc
 				color += l->color * (diffuse + specular);
 			}
 		}
+		glm::vec3 V = -ray.d;  // Incoming view direction
+		glm::vec3 R = glm::normalize(2.0f * glm::dot(V, normal) * normal - V);
+		Ray reflectedRay(position + normal * 0.001f, R);
+		//auto reflectedColor = ComputeRayColor(reflectedRay, 0, INFINITY, scene, depth + 1)) {
+		color += km * ComputeRayColor(reflectedRay, myZero, myINF, scene, recursiveDepth + 1);
 	}
 	return color;
 }
