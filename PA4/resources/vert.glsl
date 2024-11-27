@@ -38,4 +38,12 @@ void main() {
 
     color = I;
     gl_Position = projection * view * model * vec4(vPositionModel, 1.0);
+    vec4 test = view * model * vec4(vPositionModel, 1.0);
+    float depth = -1* test.z/test.w;
+    if (depth < 0){
+        color = vec3(1,1,1);
+    }
+    else {
+        color = normalize(vec3(depth,0,0));
+    }
 }

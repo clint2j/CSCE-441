@@ -16,7 +16,9 @@
                 "file": "Rasterization.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Rasterization"
             }
           },
           {
@@ -28,7 +30,9 @@
                 "file": "Course Overview.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Course Overview"
             }
           },
           {
@@ -40,7 +44,9 @@
                 "file": "Transformations.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Transformations"
             }
           },
           {
@@ -52,7 +58,9 @@
                 "file": "Course Overview.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Course Overview"
             }
           },
           {
@@ -61,10 +69,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Viewing Transformations.md",
+                "file": "Ray Tracing.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Ray Tracing"
+            }
+          },
+          {
+            "id": "30b764325d09b74e",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.7.7"
+              },
+              "icon": "lucide-file",
+              "title": "Release Notes 1.7.7"
             }
           },
           {
@@ -76,11 +98,13 @@
                 "file": "Rasterization.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Rasterization"
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -100,7 +124,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -115,7 +141,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -123,7 +151,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
@@ -146,7 +176,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Viewing Transformations.md",
+                "file": "Ray Tracing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -154,7 +184,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Ray Tracing"
             }
           },
           {
@@ -163,10 +195,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Viewing Transformations.md",
+                "file": "Ray Tracing.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Ray Tracing"
             }
           },
           {
@@ -177,7 +211,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -186,8 +222,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Viewing Transformations.md"
-              }
+                "file": "Ray Tracing.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Ray Tracing"
             }
           }
         ],
@@ -208,17 +246,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "5203ab91b9ea5ca9",
+  "active": "30b764325d09b74e",
   "lastOpenFiles": [
+    "Pasted image 20241123152956.png",
+    "Course Overview.md",
+    "Ray Tracing.md",
+    "Viewing Transformations.md",
+    "Transformations.md",
     "Pasted image 20240923235541.png",
     "Pasted image 20240923234655.png",
-    "Course Overview.md",
-    "Transformations.md",
     "Rasterization.md",
     "HW 2.md",
     "Linear Algebra Review.md",
     "Pasted image 20240919231326.png",
-    "Viewing Transformations.md",
     "GLFW.md",
     "OpenGL.md"
   ]
