@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <iostream>
 
 constexpr float myINF = 5000000;
 constexpr float myZero = 0.00001;
@@ -46,17 +47,11 @@ void Camera::TakePicture(Scene* scene)
 			Ray ray(eye, rayDirection);
 			auto rayColor = ComputeRayColor(ray, 0, myINF, scene, 0);
 			int index = (j * widthRes + i) * 3;
-			renderedImage[index] = rayColor.r;     // R
-			renderedImage[index + 1] = rayColor.g; // G
-			renderedImage[index + 2] = rayColor.b; // B
+			renderedImage[index] = rayColor.r;
+			renderedImage[index + 1] = rayColor.g;
+			renderedImage[index + 2] = rayColor.b;
 		}
 	}
-	//for (int i = 0; i < 100; ++i) {
-	//	for (int j = 0; j < 100; ++j) {
-	//		int index = ((200 + j) * widthRes + (300 + i)) * 3;
-	//		renderedImage[index] = .2;
-	//	}
-	//}
 }
 
 glm::vec3 Camera::ComputeRayColor(Ray ray, float t0, float t1, Scene* scene, int recursiveDepth)
@@ -85,10 +80,9 @@ glm::vec3 Camera::ComputeRayColor(Ray ray, float t0, float t1, Scene* scene, int
 				color += l->color * (diffuse + specular);
 			}
 		}
-		glm::vec3 V = -ray.d;  // Incoming view direction
+		glm::vec3 V = -1.0f * ray.d;
 		glm::vec3 R = glm::normalize(2.0f * glm::dot(V, normal) * normal - V);
 		Ray reflectedRay(position + normal * 0.001f, R);
-		//auto reflectedColor = ComputeRayColor(reflectedRay, 0, INFINITY, scene, depth + 1)) {
 		color += km * ComputeRayColor(reflectedRay, myZero, myINF, scene, recursiveDepth + 1);
 	}
 	return color;
