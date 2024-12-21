@@ -8,8 +8,9 @@ Plane::Plane(const glm::vec3& _center,
 	const glm::vec3& _kd,
 	const glm::vec3& _ks,
 	const glm::vec3& _km,
-	float _n)
-	: Shape(_ka, _kd, _ks, _km, _n),
+	const glm::vec3& _kt,
+	float _n, float _n2)
+	: Shape(_ka, _kd, _ks, _km, _n, _kt, _n2),
 	center(_center),
 	normal(_normal)
 {}
@@ -35,6 +36,6 @@ glm::vec3 Plane::getNormal(glm::vec3 position)
 
 MaterialRecord Plane::GetParameters(glm::vec3 position)
 {
-	return MaterialRecord(ka, kd, ks, km, n, getNormal(position));
+	return MaterialRecord(ka, kd, ks, km, n, kt, ior, getNormal(position));
 }
 

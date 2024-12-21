@@ -1,7 +1,13 @@
 #include "Triangle.h"
 
-Triangle::Triangle(std::array<Vertex, 3> _vertices, const glm::vec3& _ka, const glm::vec3& _kd, const glm::vec3& _ks, const glm::vec3& _km, float _n)
-	: Shape(_ka, _kd, _ks, _km, _n), vertices(_vertices)
+Triangle::Triangle(std::array<Vertex, 3> _vertices,
+	const glm::vec3& _ka,
+	const glm::vec3& _kd,
+	const glm::vec3& _ks,
+	const glm::vec3& _km,
+	const glm::vec3& _kt,
+	float _n, float _n2)
+	: Shape(_ka, _kd, _ks, _km, _n, _kt, _n2), vertices(_vertices)
 {
 }
 
@@ -71,5 +77,5 @@ glm::vec3 Triangle::getNormal(glm::vec3 position)
 
 MaterialRecord Triangle::GetParameters(glm::vec3 position)
 {
-	return MaterialRecord(ka, kd, ks, km, n, getNormal(position));
+	return MaterialRecord(ka, kd, ks, km, n, kt, ior, getNormal(position));
 }

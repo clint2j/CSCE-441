@@ -6,10 +6,11 @@ Sphere::Sphere(const glm::vec3& _center,
 	const glm::vec3& _kd,
 	const glm::vec3& _ks,
 	const glm::vec3& _km,
-	float _n) :
+	const glm::vec3& _kt,
+	float _n, float _n2) :
 	Center(_center),
 	Radius(_radius),
-	Shape(_ka, _kd, _ks, _km, _n)
+	Shape(_ka, _kd, _ks, _km, _n, _kt, _n2)
 {
 }
 
@@ -50,6 +51,6 @@ glm::vec3 Sphere::getNormal(glm::vec3 position)
 
 MaterialRecord Sphere::GetParameters(glm::vec3 position)
 {
-	return MaterialRecord(ka, kd, ks, km, n, getNormal(position));
+	return MaterialRecord(ka, kd, ks, km, n, kt, ior, getNormal(position));
 }
 

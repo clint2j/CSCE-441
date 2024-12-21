@@ -4,6 +4,7 @@
 struct Ray {
 	glm::vec3 o;
 	glm::vec3 d;
+	bool inside = false;
 	glm::vec3 getPosition(float t) {
 		return t * d + o;
 	}
@@ -18,23 +19,25 @@ struct MaterialRecord {
 	glm::vec3 kd = {};
 	glm::vec3 ks = {};
 	glm::vec3 km = {};
+	glm::vec3 kt = {};
 	float n = {};
+	float ior = {};
 	glm::vec3 normal = {};
 	MaterialRecord() {};
-	MaterialRecord(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess, glm::vec3 _normal);
+	MaterialRecord(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess, glm::vec3 refract, float _nRefract, glm::vec3 _normal);
 };
 
 class Shape
 {
 public:
-	Shape(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess);
+	Shape(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess, glm::vec3 refract, float _nRefract);
 	~Shape();
 	virtual float Intersect(Ray ray, float t0, float t1) = 0;
 	virtual glm::vec3 getNormal(glm::vec3 position) = 0;
 	virtual MaterialRecord GetParameters(glm::vec3 position) = 0;
 protected:
-	glm::vec3 ka, kd, ks, km;
-	float n;
+	glm::vec3 ka, kd, ks, km, kt;
+	float n, ior;
 private:
 
 };

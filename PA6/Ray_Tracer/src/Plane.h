@@ -10,7 +10,8 @@ public:
 		const glm::vec3& _kd,
 		const glm::vec3& _ks,
 		const glm::vec3& _km,
-		float _n);
+		const glm::vec3& _kt,
+		float _n, float _n2);
 	~Plane();
 	float Intersect(Ray ray, float t0, float t1) override;
 	glm::vec3 getNormal(glm::vec3 position) override;

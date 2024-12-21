@@ -1,7 +1,7 @@
 #include "Shape.h"
 
-Shape::Shape(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess)
-	: ka(ambient), kd(diffuse), ks(specular), km(mirror), n(shininess)
+Shape::Shape(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess, glm::vec3 refract, float _nRefract)
+	: ka(ambient), kd(diffuse), ks(specular), km(mirror), n(shininess), ior(_nRefract), kt(refract)
 {
 }
 
@@ -19,8 +19,8 @@ Shape::~Shape()
 //	return 0.0f;
 //}
 
-MaterialRecord::MaterialRecord(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess, glm::vec3 _normal)
-	: ka(ambient), kd(diffuse), ks(specular), km(mirror), n(shininess), normal(_normal)
+MaterialRecord::MaterialRecord(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 mirror, float shininess, glm::vec3 refract, float _nRefract, glm::vec3 _normal)
+	: ka(ambient), kd(diffuse), ks(specular), km(mirror), n(shininess), normal(_normal), ior(_nRefract), kt(refract)
 {
 }
 
